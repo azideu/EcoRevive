@@ -1,0 +1,100 @@
+001,Old Phone,Mobile,0.2,Used
+002,Broken Laptop,Laptop,2.5,Broken
+003,Tablet,Tablet,0.5,New
+004,CRT Monitor,Appliance,15.0,Broken
+005,Smart Watch,Mobile,0.1,Used
+006,Gaming Console,Other,3.0,Refurbished
+007,Microwave,Appliance,12.5,Used
+008,Keyboard,Other,0.8,Used
+009,LED TV,TV,8.0,Broken
+010,Printer,Appliance,5.5,Used
+011,Desktop PC,Laptop,8.0,Refurbished
+012,Headphones,Other,0.3,New
+013,Toaster,Appliance,1.2,Used
+014,Router,Other,0.6,Used
+015,Digital Camera,Other,0.4,Broken
+016,Smartphone,Mobile,0.18,Used
+017,Feature Phone,Mobile,0.1,Broken
+018,Fitness Tracker,Mobile,0.05,New
+019,E-reader,Tablet,0.3,Refurbished
+020,Netbook,Laptop,1.5,Used
+021,Server,Computer,18.0,Broken
+022,Monitor (LCD),Computer,4.5,Used
+023,Television (LED),TV,6.0,New
+024,Printer (Inkjet),Appliance,4.0,Refurbished
+025,Scanner,Computer,2.0,Used
+026,Fax Machine,Appliance,3.5,Broken
+027,Copier,Appliance,25.0,Used
+028,External Hard Drive,Computer,0.25,New
+029,USB Flash Drive,Other,0.01,Used
+030,Memory Card,Other,0.005,New
+031,CD/DVD Player,Audio,1.5,Refurbished
+032,Blu-ray Player,Audio,1.8,Used
+033,VCR,Audio,2.5,Broken
+034,Camcorder,Other,0.7,Used
+035,Digital Camera,Other,0.4,New
+036,Video Game Console,Gaming,3.0,Refurbished
+037,Handheld Game Console,Gaming,0.2,Used
+038,Router,Network,0.6,Broken
+039,Modem,Network,0.5,Used
+040,Network Switch,Network,1.2,New
+041,Cordless Phone,Mobile,0.3,Refurbished
+042,Answering Machine,Other,0.8,Used
+043,Headphones,Audio,0.3,New
+044,Earbuds,Audio,0.02,Used
+045,Speakers,Audio,2.0,Broken
+046,Microphone,Audio,0.4,Used
+047,Webcam,Computer,0.1,New
+048,Projector,Other,3.0,Refurbished
+049,GPS Device,Mobile,0.2,Used
+050,Calculator,Other,0.15,New
+051,Electronic Toy,Other,0.5,Broken
+052,Electric Toothbrush,Home,0.2,Used
+053,Hair Dryer,Home,0.6,New
+054,Electric Shaver,Home,0.3,Refurbished
+055,Microwave Oven,Appliance,12.0,Used
+056,Toaster Oven,Appliance,3.0,Broken
+057,Coffee Maker,Appliance,2.5,Used
+058,Blender,Appliance,1.8,New
+059,Vacuum Cleaner,Appliance,5.0,Refurbished
+060,Iron,Home,1.0,Used
+061,Washing Machine,Appliance,60.0,Broken
+062,Dryer,Appliance,55.0,Used
+063,Refrigerator,Appliance,70.0,New
+064,Freezer,Appliance,65.0,Refurbished
+065,Dishwasher,Appliance,40.0,Used
+066,Air Conditioner,Appliance,30.0,Broken
+067,Dehumidifier,Appliance,10.0,Used
+068,Heater,Appliance,5.0,New
+069,Electric Fan,Appliance,3.0,Refurbished
+070,Power Tool (Drill),Other,1.5,Used
+071,Power Tool (Saw),Other,4.0,Broken
+072,Battery Charger,Other,0.3,Used
+073,Power Bank,Mobile,0.2,New
+074,Solar Panel (small),Other,2.0,Refurbished
+075,LED Light Bulb,Lighting,0.1,Used
+076,Fluorescent Lamp,Lighting,0.2,Broken
+077,CFL Bulb,Lighting,0.08,Used
+078,Smoke Detector,Security,0.2,New
+079,Carbon Monoxide Detector,Security,0.25,Refurbished
+080,Thermostat (digital),Home,0.15,Used
+081,Security Camera,Security,0.3,Broken
+082,Doorbell (smart),Security,0.2,Used
+083,Remote Control,Other,0.1,New
+084,Cable Box,TV,1.5,Refurbished
+085,Satellite Receiver,TV,1.8,Used
+086,Soundbar,Audio,2.5,Broken
+087,Amplifier,Audio,5.0,Used
+088,Car Stereo,Audio,1.5,New
+089,Drone,Other,0.8,Refurbished
+090,Robot Vacuum,Home,3.5,Used
+091,Smart Lock,Security,0.7,Broken
+092,Smart Plug,Home,0.1,Used
+093,Smart Light Switch,Home,0.15,New
+094,Smart Speaker,Audio,0.5,Refurbished
+095,Gaming Headset,Gaming,0.4,Used
+096,VR Headset,Gaming,0.6,Broken
+097,Portable Speaker,Audio,0.3,New
+098,Smart Thermostat,Home,0.2,Refurbished
+099,E-Scooter,Other,12.0,Used
+100,Electric Kettle,Appliance,1.0,New
