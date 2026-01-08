@@ -5,9 +5,13 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +19,10 @@ public class FXDashboardPanel extends BorderPane {
     private RecyclingManager manager;
     private PieChart pieChart;
     private BarChart<String, Number> barChart;
+    
+    private Label totalItemsLabel;
+    private Label totalWeightLabel;
+    private Label pendingLabel;
 
     public FXDashboardPanel(RecyclingManager manager) {
         this.manager = manager;
@@ -24,16 +32,34 @@ public class FXDashboardPanel extends BorderPane {
 
     private void initUI() {
         Label titleLabel = new Label("Recycling Statistics Dashboard");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 20px;");
+        titleLabel.getStyleClass().add("header-label");
         
         HBox topBox = new HBox(titleLabel);
-        topBox.setStyle("-fx-alignment: center;");
-        setTop(topBox);
+        topBox.setAlignment(Pos.CENTER_LEFT);
+        topBox.setPadding(new Insets(0, 0, 20, 0));
+        
+        // Summary Cards
+        HBox summaryBox = new HBox(20);
+        summaryBox.setAlignment(Pos.CENTER);
+        
+        VBox card1 = createSummaryCard("Total Items", "0", "card-blue");
+        totalItemsLabel = (Label) card1.getChildren().get(1);
+        
+        VBox card2 = createSummaryCard("Total Weight", "0kg", "card-orange");
+        totalWeightLabel = (Label) card2.getChildren().get(1);
+        
+        VBox card3 = createSummaryCard("Pending Requests", "0", "card-purple");
+        pendingLabel = (Label) card3.getChildren().get(1);
+        
+        summaryBox.getChildren().addAll(card1, card2, card3);
 
         // Pie Chart
         pieChart = new PieChart();
         pieChart.setTitle("Category Distribution");
         pieChart.setLegendVisible(true);
+        VBox pieContainer = new VBox(pieChart);
+        pieContainer.getStyleClass().add("card");
+        VBox.setVgrow(pieContainer, Priority.ALWAYS);
 
         // Bar Chart
         CategoryAxis xAxis = new CategoryAxis();
@@ -44,17 +70,52 @@ public class FXDashboardPanel extends BorderPane {
         barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Condition Breakdown");
         barChart.setLegendVisible(false);
+        VBox barContainer = new VBox(barChart);
+        barContainer.getStyleClass().add("card");
+        VBox.setVgrow(barContainer, Priority.ALWAYS);
 
-        HBox chartsBox = new HBox(20, pieChart, barChart);
-        chartsBox.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+        HBox chartsBox = new HBox(20, pieContainer, barContainer);
+        chartsBox.setAlignment(Pos.CENTER);
+        chartsBox.setPadding(new Insets(20, 0, 0, 0));
+        
         // Make charts resize
-        pieChart.prefWidthProperty().bind(widthProperty().divide(2));
-        barChart.prefWidthProperty().bind(widthProperty().divide(2));
-
-        setCenter(chartsBox);
+        pieContainer.prefWidthProperty().bind(widthProperty().divide(2));
+        barContainer.prefWidthProperty().bind(widthProperty().divide(2));
+        
+        VBox centerContent = new VBox(summaryBox, chartsBox);
+        setCenter(centerContent);
+        setTop(topBox);
+        setPadding(new Insets(20));
+    }
+    
+    private VBox createSummaryCard(String title, String initialValue, String colorClass) {
+        VBox card = new VBox(10);
+        card.getStyleClass().addAll("summary-card", colorClass);
+        card.setAlignment(Pos.CENTER_LEFT);
+        
+        Label titleLbl = new Label(title);
+        titleLbl.getStyleClass().add("summary-card-title");
+        
+        Label valueLbl = new Label(initialValue);
+        valueLbl.getStyleClass().add("summary-card-value");
+        
+        card.getChildren().addAll(titleLbl, valueLbl);
+        return card;
     }
 
     public void updateCharts() {
+        // Update Summary Cards
+        int totalItems = manager.getRecycledItems().size();
+        double totalWeight = 0;
+        for (EWasteItem item : manager.getRecycledItems()) {
+            totalWeight += item.getWeight();
+        }
+        int pendingCount = manager.getPendingItems().size();
+        
+        if (totalItemsLabel != null) totalItemsLabel.setText(String.valueOf(totalItems));
+        if (totalWeightLabel != null) totalWeightLabel.setText(String.format("%.1f kg", totalWeight));
+        if (pendingLabel != null) pendingLabel.setText(String.valueOf(pendingCount));
+
         // Update Pie Chart
         Map<String, Integer> categoryCount = new HashMap<>();
         for (EWasteItem item : manager.getRecycledItems()) {

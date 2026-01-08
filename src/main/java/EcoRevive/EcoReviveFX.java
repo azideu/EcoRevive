@@ -36,7 +36,7 @@ public class EcoReviveFX extends Application {
         mainLayout.getStyleClass().add("root");
 
         // Navigation
-        HBox navBar = createNavBar();
+        StackPane navBar = createNavBar();
         mainLayout.setTop(navBar);
 
         // Initial View
@@ -56,25 +56,41 @@ public class EcoReviveFX extends Application {
         updatePendingCount();
     }
 
-    private HBox createNavBar() {
-        HBox nav = new HBox(15);
-        nav.setAlignment(Pos.CENTER_LEFT);
+    private StackPane createNavBar() {
+        StackPane nav = new StackPane();
         nav.setPadding(new Insets(15));
         nav.getStyleClass().add("nav-bar");
 
+        // Left: Branding
+        Label brandLabel = new Label("EcoRevive");
+        brandLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        HBox leftBox = new HBox(brandLabel);
+        leftBox.setAlignment(Pos.CENTER_LEFT);
+        leftBox.setPickOnBounds(false);
+
+        // Center: Nav Buttons
         ToggleGroup group = new ToggleGroup();
         ToggleButton manageBtn = createNavButton("Manage Items", group);
         ToggleButton inventoryBtn = createNavButton("Inventory", group);
         ToggleButton statsBtn = createNavButton("Statistics", group);
+
+        // Prevent deselection
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            }
+        });
 
         manageBtn.setSelected(true);
         manageBtn.setOnAction(e -> showManagementPanel());
         inventoryBtn.setOnAction(e -> showInventoryPanel());
         statsBtn.setOnAction(e -> showStatsPanel());
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox centerBox = new HBox(15, manageBtn, inventoryBtn, statsBtn);
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setPickOnBounds(false);
 
+        // Right: Theme Button
         Button themeBtn = new Button("☀");
         themeBtn.setTooltip(new Tooltip("Toggle Light/Dark Mode"));
         themeBtn.setOnAction(e -> {
@@ -86,8 +102,12 @@ public class EcoReviveFX extends Application {
                 themeBtn.setText("☾");
             }
         });
+        
+        HBox rightBox = new HBox(themeBtn);
+        rightBox.setAlignment(Pos.CENTER_RIGHT);
+        rightBox.setPickOnBounds(false);
 
-        nav.getChildren().addAll(manageBtn, inventoryBtn, statsBtn, spacer, themeBtn);
+        nav.getChildren().addAll(leftBox, centerBox, rightBox);
         return nav;
     }
 
@@ -114,6 +134,11 @@ public class EcoReviveFX extends Application {
         container.setPadding(new Insets(20));
         container.setAlignment(Pos.CENTER);
         
+        VBox card = new VBox(20);
+        card.getStyleClass().add("card");
+        card.setPadding(new Insets(30));
+        card.setAlignment(Pos.CENTER);
+        
         Label header = new Label("New Entry");
         header.getStyleClass().add("header-label");
 
@@ -121,13 +146,16 @@ public class EcoReviveFX extends Application {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(15);
         grid.setVgap(15);
-        grid.setPadding(new Insets(20));
 
         TextField nameField = new TextField();
+        nameField.setPromptText("Item Name");
         ComboBox<String> categoryBox = new ComboBox<>(FXCollections.observableArrayList("Mobile", "Laptop", "Tablet", "TV", "Appliance", "Other"));
+        categoryBox.setPromptText("Select Category");
         categoryBox.setMaxWidth(Double.MAX_VALUE);
         TextField weightField = new TextField();
+        weightField.setPromptText("Weight (kg)");
         ComboBox<String> conditionBox = new ComboBox<>(FXCollections.observableArrayList("New", "Used", "Broken", "Refurbished"));
+        conditionBox.setPromptText("Condition");
         conditionBox.setMaxWidth(Double.MAX_VALUE);
 
         grid.add(new Label("Name:"), 0, 0);
@@ -145,13 +173,15 @@ public class EcoReviveFX extends Application {
             try {
                 String name = nameField.getText();
                 String category = categoryBox.getValue();
-                double weight = Double.parseDouble(weightField.getText());
+                String weightText = weightField.getText();
                 String condition = conditionBox.getValue();
 
-                if (name.isEmpty() || category == null) {
+                if (name.isEmpty() || category == null || weightText.isEmpty() || condition == null) {
                     showAlert("Error", "Please fill all fields.");
                     return;
                 }
+                
+                double weight = Double.parseDouble(weightText);
 
                 String id = manager.generateNextId();
                 EWasteItem item = new EWasteItem(id, name, category, weight, condition);
@@ -160,11 +190,13 @@ public class EcoReviveFX extends Application {
                 nameField.clear();
                 weightField.clear();
                 categoryBox.getSelectionModel().clearSelection();
+                categoryBox.setPromptText("Select Category");
                 conditionBox.getSelectionModel().clearSelection();
+                conditionBox.setPromptText("Condition");
 
                 updatePendingCount();
                 showAlert("Success", "Item added to queue!");
-                if (logArea != null) logArea.appendText("Submitted: " + item.getName() + "\n");
+                if (logArea != null) logArea.appendText("Submitted: " + item.getName() + " (" + condition + ")\n");
 
             } catch (NumberFormatException ex) {
                 showAlert("Error", "Invalid weight format.");
@@ -173,13 +205,20 @@ public class EcoReviveFX extends Application {
 
         grid.add(submitBtn, 1, 4);
         
-        container.getChildren().addAll(header, grid);
+        card.getChildren().addAll(header, grid);
+        container.getChildren().add(card);
         return container;
     }
 
+
     private VBox createProcessPane() {
-        VBox panel = new VBox(15);
+        VBox panel = new VBox(20);
         panel.setPadding(new Insets(20));
+
+        VBox card = new VBox(15);
+        card.getStyleClass().add("card");
+        card.setPadding(new Insets(20));
+        VBox.setVgrow(card, Priority.ALWAYS);
 
         Label header = new Label("Processing Queue");
         header.getStyleClass().add("header-label");
@@ -187,7 +226,7 @@ public class EcoReviveFX extends Application {
         HBox top = new HBox(20);
         top.setAlignment(Pos.CENTER_LEFT);
         pendingCountLabel = new Label("Pending Items: " + manager.getPendingItems().size());
-        pendingCountLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        pendingCountLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;");
         
         Button processBtn = new Button("Process Pending");
         processBtn.setOnAction(e -> {
@@ -209,19 +248,26 @@ public class EcoReviveFX extends Application {
         logArea.setEditable(false);
         VBox.setVgrow(logArea, Priority.ALWAYS);
 
-        panel.getChildren().addAll(header, top, logArea);
+        card.getChildren().addAll(header, top, logArea);
+        panel.getChildren().add(card);
+        
         return panel;
     }
 
     private void showInventoryPanel() {
         VBox panel = new VBox(10);
-        panel.setPadding(new Insets(15));
+        panel.setPadding(new Insets(20));
+
+        VBox card = new VBox(15);
+        card.getStyleClass().add("card");
+        card.setPadding(new Insets(20));
+        VBox.setVgrow(card, Priority.ALWAYS);
 
         // Search Panel
         HBox searchPanel = new HBox(10);
         searchPanel.setAlignment(Pos.CENTER_LEFT);
         TextField searchField = new TextField();
-        searchField.setPromptText("Search...");
+        searchField.setPromptText("Search by name/ID...");
         Button searchBtn = new Button("Search");
         Button clearBtn = new Button("Clear");
         
@@ -253,7 +299,7 @@ public class EcoReviveFX extends Application {
             }
         });
 
-        searchPanel.getChildren().addAll(new Label("Search:"), searchField, searchBtn, clearBtn, sortBox);
+        searchPanel.getChildren().addAll(new Label("Filter:"), searchField, searchBtn, clearBtn, sortBox);
 
         // Table
         inventoryTable = new TableView<>();
@@ -271,6 +317,30 @@ public class EcoReviveFX extends Application {
         
         TableColumn<EWasteItem, String> colCond = new TableColumn<>("Condition");
         colCond.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCondition()));
+        
+        // Custom Cell Factory for Status Badges
+        colCond.setCellFactory(column -> new TableCell<EWasteItem, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    Label badge = new Label(item);
+                    badge.getStyleClass().add("status-badge");
+                    
+                    switch (item.toLowerCase()) {
+                        case "new": badge.getStyleClass().add("status-new"); break;
+                        case "broken": badge.getStyleClass().add("status-broken"); break;
+                        case "used": badge.getStyleClass().add("status-used"); break;
+                        case "refurbished": badge.getStyleClass().add("status-refurbished"); break;
+                    }
+                    setGraphic(badge);
+                    setText(null);
+                }
+            }
+        });
 
         inventoryTable.getColumns().add(colId);
         inventoryTable.getColumns().add(colName);
@@ -295,7 +365,8 @@ public class EcoReviveFX extends Application {
 
         buttonPanel.getChildren().addAll(deleteBtn, editBtn, exportBtn, refreshBtn);
 
-        panel.getChildren().addAll(searchPanel, inventoryTable, buttonPanel);
+        card.getChildren().addAll(searchPanel, inventoryTable, buttonPanel);
+        panel.getChildren().add(card);
         mainLayout.setCenter(panel);
         updateInventoryTable(manager.getRecycledItems());
     }

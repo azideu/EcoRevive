@@ -1,52 +1,25 @@
-042,Answering Machine,Other,0.8,Used
-032,Blu-ray Player,Audio,1.8,Used
 002,Broken Laptop,Laptop,2.5,Broken
-031,CD/DVD Player,Audio,1.5,Refurbished
-004,CRT Monitor,Appliance,15.0,Broken
-050,Calculator,Other,0.15,New
-034,Camcorder,Other,0.7,Used
-027,Copier,Appliance,25.0,Used
-041,Cordless Phone,Mobile,0.3,Refurbished
-011,Desktop PC,Laptop,8.0,Refurbished
-015,Digital Camera,Other,0.4,Broken
-035,Digital Camera,Other,0.4,New
-019,E-reader,Tablet,0.3,Refurbished
-044,Earbuds,Audio,0.02,Used
-028,External Hard Drive,Computer,0.25,New
-026,Fax Machine,Appliance,3.5,Broken
-017,Feature Phone,Mobile,0.1,Broken
-018,Fitness Tracker,Mobile,0.05,New
-049,GPS Device,Mobile,0.2,Used
-006,Gaming Console,Other,3.0,Refurbished
-037,Handheld Game Console,Gaming,0.2,Used
-012,Headphones,Other,0.3,New
-043,Headphones,Audio,0.3,New
-008,Keyboard,Other,0.8,Used
+004,LED Monitor,Appliance,15.0,New
 009,LED TV,TV,8.0,Broken
-030,Memory Card,Other,0.005,New
-046,Microphone,Audio,0.4,Used
+003,iPad,Tablet,0.5,New
+006,Gaming Console,Other,3.0,Refurbished
+008,Keyboard,Other,0.8,Used
 007,Microwave,Appliance,12.5,Used
-039,Modem,Network,0.5,Used
-022,Monitor (LCD),Computer,4.5,Used
-020,Netbook,Laptop,1.5,Used
-040,Network Switch,Network,1.2,New
 001,Old Phone,Mobile,0.2,Used
 010,Printer,Appliance,5.5,Used
-024,Printer (Inkjet),Appliance,4.0,Refurbished
-048,Projector,Other,3.0,Refurbished
-014,Router,Other,0.6,Used
-038,Router,Network,0.6,Broken
-025,Scanner,Computer,2.0,Used
-021,Server,Computer,18.0,Broken
 005,Smart Watch,Mobile,0.1,Used
-016,Smartphone,Mobile,0.18,Used
-045,Speakers,Audio,2.0,Broken
-023,Television (LED),TV,6.0,New
-013,Toaster,Appliance,1.2,Used
-029,USB Flash Drive,Other,0.01,Used
-033,VCR,Audio,2.5,Broken
-036,Video Game Console,Gaming,3.0,Refurbished
-047,Webcam,Computer,0.1,New
-003,iPad,Tablet,0.5,New
-053,iPhone 13,Mobile,0.3,Used
-054,remote,Other,0.1,Broken
+011,Galaxy S21,Mobile,0.2,Refurbished
+012,Dell XPS,Laptop,2.2,Used
+013,Sony Bravia,TV,12.0,Broken
+014,iPad Air,Tablet,0.6,Used
+015,Blender,Appliance,3.0,New
+016,Headphones,Other,0.3,Used
+017,iPhone 12,Mobile,0.2,Broken
+018,MacBook Pro,Laptop,2.0,New
+019,Kindle,Tablet,0.3,Used
+020,Toaster,Appliance,1.5,Used
+021,Old Radio,Other,2.0,Broken
+022,Monitor 24",Appliance,4.5,Refurbished
+023,Android Tablet,Tablet,0.5,Broken
+024,GameBoy,Other,0.2,Used
+025,CRT TV,TV,15.0,Broken
