@@ -1,75 +1,56 @@
-# EcoRevive
+# EcoRevive (JavaFX Edition)
 
-**EcoRevive** is a Java-based desktop application designed to streamline the management and tracking of electronic waste (E-Waste) for recycling. The application features a custom "Modern" graphical user interface (GUI) to help users easily log, monitor, and manage recyclable electronic items, promoting sustainable disposal practices.
+**EcoRevive** is a modern JavaFX-based desktop application designed to streamline the management and tracking of electronic waste (E-Waste) for recycling. It features a professional dark-themed GUI styled with CSS (JavaFX styling) to help users log, monitor, and visualize their recycling efforts suitable for the modern desktop environment.
 
 ## Features
 
-  * **E-Waste Management:** Add and track various types of electronic waste items.
-  * **Dashboard View:** A dedicated dashboard for viewing recycling statistics and active items.
-  * **Data Persistence:** Automatically saves and retrieves recycling data using a local file system (`ewaste_data.txt`), ensuring your records are never lost.
-  * **Modern UI:** Built with custom Java Swing components (`ModernButton`, `ModernPanel`, `ModernTextField`) for a clean, aesthetic look.
-  * **Object-Oriented Design:** structured using clear separation of concerns with dedicated managers and service classes.
+*   **E-Waste Inventory:** Add, edit, delete, and search various types of electronic waste items.
+*   **Queue Management:** A queue-based system for submitting items before final processing.
+*   **Visual Dashboard:** Real-time statistics with charts (Pie & Bar charts) visualizing category distribution and weight contributions.
+*   **Data Persistence:** Automatically saves inventory to `ewaste_data.txt` so records are preserved between sessions.
+*   **CSV Export:** Export your inventory data to `.csv` files for external use.
+*   **Modern Dark UI:** Fully styled using an external `styles.css` file for a premium look and feel.
 
 ## Tech Stack
 
-  * **Language:** Java (JDK 8+)
-  * **GUI Framework:** Java Swing / AWT
-  * **Data Storage:** File-based persistence (Text file)
+*   **Language:** Java 21
+*   **GUI Framework:** JavaFX 21
+*   **Build Tool:** Maven
+*   **Styling:** CSS3 (JavaFX variants)
 
 ## Project Structure
 
-Here is an overview of the key files in the repository:
+*   **`EcoReviveFX.java`**: The primary JavaFX Application class.
+*   **`Launcher.java`**: A helper class to run the application easily within IDEs (VS Code, IntelliJ, etc.) without needing complex module configuration.
+*   **`FXDashboardPanel.java`**: Handles the visualization logic (charts and graphs).
+*   **`RecyclingManager.java`**: Core logic for managing inventory and queues.
+*   **`FileService.java`**: Persistence layer for saving/loading data and exporting CSVs.
+*   **`styles.css`**: Contains all visual styling definitions.
 
-  * **`EcoReviveMain.java`**: The entry point of the application. Run this file to start the program.
-  * **`RecyclingManager.java`**: Contains the core business logic for handling recycling operations.
-  * **`DashboardPanel.java`**: The main GUI panel that displays the user interface.
-  * **`EWasteItem.java`**: The data model representing a single piece of electronic waste.
-  * **`FileService.java`**: Handles reading from and writing to the `ewaste_data.txt` file.
-  * **`Modern*.java`**: Custom UI components (Buttons, Panels, TextFields) that override standard Swing elements for improved styling.
-  * **`ewaste_data.txt`**: The database file where e-waste records are stored.
+## How to Run
 
-## Getting Started
+### Option 1: Using an IDE (VS Code, IntelliJ) - **Recommended**
+
+If you encounter "JavaFX runtime components are missing" errors when running `EcoReviveFX.java` directly, use the **Launcher** instead:
+
+1.  Navigate to `src/main/java/EcoRevive/Launcher.java`.
+2.  Click the **Run** button (or right-click -> Run).
+
+*This bypasses the module-path strictness by treating the app as a standard non-modular application at startup.*
+
+### Option 2: Using Terminal (Maven)
+
+You can run the application directly from the command line using Maven:
+
+```bash
+mvn clean javafx:run
+```
 
 ### Prerequisites
 
-Ensure you have the **Java Development Kit (JDK)** installed on your system.
-
-  * To check, run: `java -version`
-  * If not installed, download it from [Oracle](https://www.oracle.com/java/technologies/downloads/) or [OpenJDK](https://openjdk.org/).
-
-### Installation & Run
-
-1.  **Clone the Repository**
-
-    ```bash
-    git clone https://github.com/azideu/EcoRevive.git
-    cd EcoRevive
-    ```
-
-2.  **Compile the Code**
-    Compile all Java files in the directory.
-
-    ```bash
-    javac *.java
-    ```
-
-3.  **Run the Application**
-    Execute the main class to launch the GUI.
-
-    ```bash
-    java EcoReviveMain
-    ```
+*   Java JDK 21+
+*   Maven 3.x+
 
 ## Contributing
 
-Contributions are welcome\! If you have ideas for new features (like data visualization charts or export to CSV), feel free to fork the repository and submit a pull request.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
-## License
-
-This project is open-source. Please check the repository for specific license details.
+Contributions are welcome! Feel free to fork the repository and submit pull requests.

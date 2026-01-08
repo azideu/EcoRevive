@@ -1,13 +1,12 @@
 package EcoRevive;
 
 import java.io.*;
-import java.util.LinkedList;
 
 public class FileService {
-    private static final String FILE_NAME = "ewaste_data.txt";
+    private static final String FILE_NAME = "/Users/nadia.ak/Desktop/Folders/coding/Java Sem 3/EcoRevive/ewaste_data.txt";
 
     // Save the list of recycled items to file
-    public void saveInventory(LinkedList<EWasteItem> items) {
+    public void saveInventory(MyLinkedList<EWasteItem> items) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (EWasteItem item : items) {
                 writer.write(item.toFileString());
@@ -20,8 +19,8 @@ public class FileService {
     }
 
     // Load items from file
-    public LinkedList<EWasteItem> loadInventory() {
-        LinkedList<EWasteItem> items = new LinkedList<>();
+    public MyLinkedList<EWasteItem> loadInventory() {
+        MyLinkedList<EWasteItem> items = new MyLinkedList<>();
         File file = new File(FILE_NAME);
 
         if (!file.exists()) {
@@ -45,7 +44,7 @@ public class FileService {
     }
 
     // Export to CSV
-    public void exportToCSV(LinkedList<EWasteItem> items, String filename) {
+    public void exportToCSV(MyLinkedList<EWasteItem> items, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             // Header
             writer.write("ID,Name,Category,Weight,Condition");

@@ -22,3 +22,8 @@ hs_err_pid*
 out/
 # Mac
 .DS_Store
+# Maven
+target/
+
+# Application logs
+debug_log.txt
