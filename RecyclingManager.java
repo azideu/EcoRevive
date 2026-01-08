@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RecyclingManager {
-    private LinkedList<EWasteItem> recycledItems;
-    private Queue<EWasteItem> pendingQueue;
-    private Stack<EWasteItem> deletedStack;
+    private LinkedList<EcoRevive.EWasteItem> recycledItems;
+    private Queue<EcoRevive.EWasteItem> pendingQueue;
+    private Stack<EcoRevive.EWasteItem> deletedStack;
     private int nextId = 1;
 
     public RecyclingManager() {
@@ -23,27 +23,27 @@ public class RecyclingManager {
     }
 
     // Add item to the pending queue
-    public void addItemToQueue(EWasteItem item) {
+    public void addItemToQueue(EcoRevive.EWasteItem item) {
         pendingQueue.add(item);
     }
 
     // Process all items in the queue (move to recycled list)
     // Returns the list of items that were processed
-    public LinkedList<EWasteItem> processQueue() {
-        LinkedList<EWasteItem> processed = new LinkedList<>();
+    public LinkedList<EcoRevive.EWasteItem> processQueue() {
+        LinkedList<EcoRevive.EWasteItem> processed = new LinkedList<>();
         if (pendingQueue.isEmpty()) {
             return processed;
         }
 
         while (!pendingQueue.isEmpty()) {
-            EWasteItem item = pendingQueue.poll();
+            EcoRevive.EWasteItem item = pendingQueue.poll();
             recycledItems.add(item);
             processed.add(item);
         }
         return processed;
     }
 
-    public Queue<EWasteItem> getPendingItems() {
+    public Queue<EcoRevive.EWasteItem> getPendingItems() {
         return pendingQueue;
     }
 
@@ -55,21 +55,21 @@ public class RecyclingManager {
         }
 
         System.out.println("\n--- Recycled Inventory ---");
-        for (EWasteItem item : recycledItems) {
+        for (EcoRevive.EWasteItem item : recycledItems) {
             System.out.println(item);
         }
         System.out.println("--------------------------");
     }
 
-    public LinkedList<EWasteItem> getRecycledItems() {
+    public LinkedList<EcoRevive.EWasteItem> getRecycledItems() {
         return recycledItems;
     }
 
-    public void setRecycledItems(LinkedList<EWasteItem> items) {
+    public void setRecycledItems(LinkedList<EcoRevive.EWasteItem> items) {
         this.recycledItems = items;
         // Update nextId based on existing items
         int maxId = 0;
-        for (EWasteItem item : items) {
+        for (EcoRevive.EWasteItem item : items) {
             try {
                 int id = Integer.parseInt(item.getId());
                 if (id > maxId) {
@@ -84,7 +84,7 @@ public class RecyclingManager {
 
     // Remove item by ID and push to stack
     public boolean removeItem(String id) {
-        for (EWasteItem item : recycledItems) {
+        for (EcoRevive.EWasteItem item : recycledItems) {
             if (item.getId().equals(id)) {
                 recycledItems.remove(item);
                 deletedStack.push(item);
@@ -97,10 +97,10 @@ public class RecyclingManager {
     // Update item details
     public boolean updateItem(String id, String newName, String newCategory, double newWeight, String newCondition) {
         for (int i = 0; i < recycledItems.size(); i++) {
-            EWasteItem item = recycledItems.get(i);
+            EcoRevive.EWasteItem item = recycledItems.get(i);
             if (item.getId().equals(id)) {
                 // Create new item with updated details but same ID
-                EWasteItem updatedItem = new EWasteItem(id, newName, newCategory, newWeight, newCondition);
+                EcoRevive.EWasteItem updatedItem = new EcoRevive.EWasteItem(id, newName, newCategory, newWeight, newCondition);
                 recycledItems.set(i, updatedItem);
                 return true;
             }
@@ -111,7 +111,7 @@ public class RecyclingManager {
     // Undo last delete
     public boolean undoDelete() {
         if (!deletedStack.isEmpty()) {
-            EWasteItem item = deletedStack.pop();
+            EcoRevive.EWasteItem item = deletedStack.pop();
             recycledItems.add(item);
             return true;
         }
@@ -119,18 +119,18 @@ public class RecyclingManager {
     }
 
     // Sort items
-    public void sortItems(Comparator<EWasteItem> comparator) {
+    public void sortItems(Comparator<EcoRevive.EWasteItem> comparator) {
         Collections.sort(recycledItems, comparator);
     }
 
     // Search items by query (ID, Name, or Category)
-    public LinkedList<EWasteItem> searchItems(String query) {
-        LinkedList<EWasteItem> result = new LinkedList<>();
+    public LinkedList<EcoRevive.EWasteItem> searchItems(String query) {
+        LinkedList<EcoRevive.EWasteItem> result = new LinkedList<>();
         String lowerQuery = query.toLowerCase();
-        for (EWasteItem item : recycledItems) {
+        for (EcoRevive.EWasteItem item : recycledItems) {
             if (item.getId().toLowerCase().contains(lowerQuery) ||
-                item.getName().toLowerCase().contains(lowerQuery) ||
-                item.getCategory().toLowerCase().contains(lowerQuery)) {
+                    item.getName().toLowerCase().contains(lowerQuery) ||
+                    item.getCategory().toLowerCase().contains(lowerQuery)) {
                 result.add(item);
             }
         }
@@ -143,7 +143,7 @@ public class RecyclingManager {
         double totalWeight = 0;
         java.util.Map<String, Integer> categoryCount = new java.util.HashMap<>();
 
-        for (EWasteItem item : recycledItems) {
+        for (EcoRevive.EWasteItem item : recycledItems) {
             totalWeight += item.getWeight();
             categoryCount.put(item.getCategory(), categoryCount.getOrDefault(item.getCategory(), 0) + 1);
         }
@@ -158,16 +158,16 @@ public class RecyclingManager {
         }
 
         return String.format("Total Items Recycled: %d\nTotal Weight Recycled: %.2f kg\nMost Common Category: %s\nTotal Eco-Points: %d",
-                             totalItems, totalWeight, mostCommonCategory, calculateEcoPoints());
+                totalItems, totalWeight, mostCommonCategory, calculateEcoPoints());
     }
 
     // Calculate total eco points
     private int calculateEcoPoints() {
         int totalPoints = 0;
-        
-        for (EWasteItem item : recycledItems) {
+
+        for (EcoRevive.EWasteItem item : recycledItems) {
             double points = 0;
-            
+
             // 1. Base points based on Category (Precious metals/complexity value)
             switch (item.getCategory()) {
                 case "Laptop":
