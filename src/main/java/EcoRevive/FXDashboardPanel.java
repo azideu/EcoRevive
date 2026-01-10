@@ -23,6 +23,7 @@ public class FXDashboardPanel extends BorderPane {
     private Label totalItemsLabel;
     private Label totalWeightLabel;
     private Label pendingLabel;
+    private Label ecoPointsLabel;
 
     public FXDashboardPanel(RecyclingManager manager) {
         this.manager = manager;
@@ -50,8 +51,11 @@ public class FXDashboardPanel extends BorderPane {
         
         VBox card3 = createSummaryCard("Pending Requests", "0", "card-purple");
         pendingLabel = (Label) card3.getChildren().get(1);
+
+        VBox card4 = createSummaryCard("Eco-Points", "0", "card-green");
+        ecoPointsLabel = (Label) card4.getChildren().get(1);
         
-        summaryBox.getChildren().addAll(card1, card2, card3);
+        summaryBox.getChildren().addAll(card1, card2, card3, card4);
 
         // Pie Chart
         pieChart = new PieChart();
@@ -111,10 +115,12 @@ public class FXDashboardPanel extends BorderPane {
             totalWeight += item.getWeight();
         }
         int pendingCount = manager.getPendingItems().size();
+        int ecoPoints = manager.calculateEcoPoints();
         
         if (totalItemsLabel != null) totalItemsLabel.setText(String.valueOf(totalItems));
         if (totalWeightLabel != null) totalWeightLabel.setText(String.format("%.1f kg", totalWeight));
         if (pendingLabel != null) pendingLabel.setText(String.valueOf(pendingCount));
+        if (ecoPointsLabel != null) ecoPointsLabel.setText(String.valueOf(ecoPoints));
 
         // Update Pie Chart
         Map<String, Integer> categoryCount = new HashMap<>();

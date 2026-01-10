@@ -42,7 +42,7 @@ public class EcoReviveFX extends Application {
         // Initial View
         showManagementPanel();
 
-        Scene scene = new Scene(mainLayout, 900, 700);
+        Scene scene = new Scene(mainLayout, 1100, 800);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         primaryStage.setTitle("EcoRevive: Smart E-Waste Recycling (JavaFX)");
@@ -272,8 +272,29 @@ public class EcoReviveFX extends Application {
         Button clearBtn = new Button("Clear");
         
         searchBtn.setOnAction(e -> updateInventoryTable(manager.searchItems(searchField.getText())));
+        
+        ComboBox<String> categoryFilterBox = new ComboBox<>(FXCollections.observableArrayList(
+            "All Categories", "Mobile", "Laptop", "Tablet", "TV", "Appliance", "Other"
+        ));
+        categoryFilterBox.setPromptText("Filter Category");
+        categoryFilterBox.setOnAction(e -> {
+            String selected = categoryFilterBox.getValue();
+            if (selected == null || selected.equals("All Categories")) {
+                updateInventoryTable(manager.getRecycledItems());
+            } else {
+                MyLinkedList<EWasteItem> filtered = new MyLinkedList<>();
+                for (EWasteItem item : manager.getRecycledItems()) {
+                    if (item.getCategory().equals(selected)) {
+                        filtered.add(item);
+                    }
+                }
+                updateInventoryTable(filtered);
+            }
+        });
+
         clearBtn.setOnAction(e -> {
             searchField.clear();
+            categoryFilterBox.setValue(null);
             updateInventoryTable(manager.getRecycledItems());
         });
 
@@ -299,7 +320,7 @@ public class EcoReviveFX extends Application {
             }
         });
 
-        searchPanel.getChildren().addAll(new Label("Filter:"), searchField, searchBtn, clearBtn, sortBox);
+        searchPanel.getChildren().addAll(new Label("Filter:"), searchField, searchBtn, clearBtn, sortBox, categoryFilterBox);
 
         // Table
         inventoryTable = new TableView<>();
@@ -363,7 +384,17 @@ public class EcoReviveFX extends Application {
         exportBtn.setOnAction(e -> exportCSV());
         refreshBtn.setOnAction(e -> updateInventoryTable(manager.getRecycledItems()));
 
-        buttonPanel.getChildren().addAll(deleteBtn, editBtn, exportBtn, refreshBtn);
+        Button undoBtn = new Button("Undo Delete");
+        undoBtn.setOnAction(e -> {
+            if (manager.undoDelete()) {
+                updateInventoryTable(manager.getRecycledItems());
+                showAlert("Success", "Restored last deleted item.");
+            } else {
+                showAlert("Info", "Nothing to undo.");
+            }
+        });
+
+        buttonPanel.getChildren().addAll(deleteBtn, editBtn, exportBtn, refreshBtn, undoBtn);
 
         card.getChildren().addAll(searchPanel, inventoryTable, buttonPanel);
         panel.getChildren().add(card);
@@ -411,6 +442,7 @@ public class EcoReviveFX extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText("Delete Item " + selected.getId() + "?");
+        styleDialog(alert);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             if (manager.removeItem(selected.getId())) {
@@ -429,6 +461,7 @@ public class EcoReviveFX extends Application {
         Dialog<EWasteItem> dialog = new Dialog<>();
         dialog.setTitle("Edit Item");
         dialog.setHeaderText("Edit details for " + selected.getId());
+        styleDialog(dialog);
 
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
@@ -493,7 +526,19 @@ public class EcoReviveFX extends Application {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        styleDialog(alert);
         alert.showAndWait();
+    }
+
+    private void styleDialog(Dialog<?> dialog) {
+        DialogPane pane = dialog.getDialogPane();
+        pane.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        pane.getStyleClass().add("custom-dialog");
+        
+        // Inherit light theme if active
+        if (mainLayout.getStyleClass().contains("light-theme")) {
+            pane.getStyleClass().add("light-theme");
+        }
     }
 
     public static void main(String[] args) {

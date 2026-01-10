@@ -161,7 +161,7 @@ public class RecyclingManager {
     }
 
     // Calculate total eco points
-    private int calculateEcoPoints() {
+    public int calculateEcoPoints() {
         int totalPoints = 0;
         
         for (EWasteItem item : recycledItems) {

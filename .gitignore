@@ -24,6 +24,8 @@ out/
 .DS_Store
 # Maven
 target/
-
+# VSCode
+*.json
+.vscode/
 # Application logs
 debug_log.txt

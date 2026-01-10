@@ -301,6 +301,7 @@
 .card-blue { -fx-border-color: rgba(76, 154, 255, 0.5); }
 .card-orange { -fx-border-color: rgba(255, 171, 0, 0.5); }
 .card-purple { -fx-border-color: rgba(171, 71, 188, 0.5); }
+.card-green { -fx-border-color: rgba(76, 175, 80, 0.5); }
 
 /* Status Badges */
 .status-badge {
@@ -341,6 +342,47 @@
 
 /* ... existing dark theme styles ... */
 
+/* =========================================
+   DIALOG STYLING
+   ========================================= */
+.custom-dialog .dialog-pane {
+    -fx-background-color: #1E1E1E;
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+}
+
+.custom-dialog .dialog-pane .header-panel {
+    -fx-background-color: #252525;
+    -fx-padding: 15px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #333333;
+}
+
+.custom-dialog .dialog-pane .header-panel .label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.custom-dialog .dialog-pane .content {
+    -fx-padding: 20px;
+    -fx-background-color: #1E1E1E; /* Ensure content area matches */
+}
+.custom-dialog .dialog-pane .content .label, 
+.custom-dialog .dialog-pane .content .text {
+    -fx-text-fill: #E0E0E0;
+    -fx-font-size: 14px;
+}
+
+/* Button bar area */
+.custom-dialog .dialog-pane .button-bar {
+    -fx-padding: 15px;
+    -fx-background-color: #1E1E1E;
+}
+
+
+/* ... existing dark theme styles ... */
+
 .chart-horizontal-grid-lines, .chart-vertical-grid-lines {
     -fx-stroke: #333333;
     -fx-stroke-dash-array: 0.1 5.0; /* Dotted lines */
@@ -349,6 +391,33 @@
 /* =========================================
    LIGHT THEME OVERRIDES
    ========================================= */
+
+.light-theme .custom-dialog .dialog-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #DFE6E9;
+}
+
+.light-theme .custom-dialog .dialog-pane .header-panel {
+    -fx-background-color: #E2E6EA;
+    -fx-border-color: #DFE6E9;
+}
+
+.light-theme .custom-dialog .dialog-pane .header-panel .label {
+    -fx-text-fill: #2D3436;
+}
+
+.light-theme .custom-dialog .dialog-pane .content {
+    -fx-background-color: #FFFFFF;
+}
+
+.light-theme .custom-dialog .dialog-pane .content .label,
+.light-theme .custom-dialog .dialog-pane .content .text {
+    -fx-text-fill: #2D3436;
+}
+
+.light-theme .custom-dialog .dialog-pane .button-bar {
+    -fx-background-color: #FFFFFF;
+}
 
 .light-theme .nav-bar {
     -fx-background-color: #FFFFFF;
