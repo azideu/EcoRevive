@@ -3,7 +3,7 @@ package EcoRevive;
 import java.io.*;
 
 public class FileService {
-    private static final String FILE_NAME = "/Users/nadia.ak/Desktop/Folders/coding/Java Sem 3/EcoRevive/ewaste_data.txt";
+    private static final String FILE_NAME = "ewaste_data.txt";
 
     // Save the list of recycled items to file
     public void saveInventory(MyLinkedList<EWasteItem> items) {
