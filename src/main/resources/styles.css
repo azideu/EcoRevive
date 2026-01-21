@@ -244,6 +244,7 @@
 }
 .chart-legend-item {
     -fx-text-fill: #B0B0B0;
+    -fx-padding: 5px 15px;
 }
 
 /* Expanded Chart Colors */

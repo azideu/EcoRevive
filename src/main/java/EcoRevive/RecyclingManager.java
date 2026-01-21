@@ -169,36 +169,36 @@ public class RecyclingManager {
             
             // 1. Base points based on Category (Precious metals/complexity value)
             switch (item.getCategory()) {
-                case "Laptop":
-                case "Mobile":
-                case "Tablet":
-                    points += 50; // High value
+                case Constants.CAT_LAPTOP:
+                case Constants.CAT_MOBILE:
+                case Constants.CAT_TABLET:
+                    points += Constants.POINTS_HIGH_VALUE; // High value
                     break;
-                case "TV":
-                case "Appliance":
-                    points += 20; // Medium value
+                case Constants.CAT_TV:
+                case Constants.CAT_APPLIANCE:
+                    points += Constants.POINTS_MEDIUM_VALUE; // Medium value
                     break;
                 default:
-                    points += 10; // Standard value
+                    points += Constants.POINTS_STANDARD; // Standard value
             }
 
             // 2. Points for Weight (Encourage recycling heavy items)
-            points += (item.getWeight() * 5);
+            points += (item.getWeight() * Constants.POINTS_PER_KG);
 
             // 3. Multiplier based on Condition (Encourage reuse)
             double multiplier = 1.0;
             switch (item.getCondition()) {
-                case "New":
-                    multiplier = 2.0; // Best for reuse
+                case Constants.COND_NEW:
+                    multiplier = Constants.MULTIPLIER_NEW; // Best for reuse
                     break;
-                case "Refurbished":
-                    multiplier = 1.5;
+                case Constants.COND_REFURBISHED:
+                    multiplier = Constants.MULTIPLIER_REFURBISHED;
                     break;
-                case "Used":
-                    multiplier = 1.0;
+                case Constants.COND_USED:
+                    multiplier = Constants.MULTIPLIER_USED;
                     break;
-                case "Broken":
-                    multiplier = 0.5; // Recycling only
+                case Constants.COND_BROKEN:
+                    multiplier = Constants.MULTIPLIER_BROKEN; // Recycling only
                     break;
             }
 

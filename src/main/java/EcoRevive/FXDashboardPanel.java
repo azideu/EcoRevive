@@ -70,6 +70,21 @@ public class FXDashboardPanel extends BorderPane {
         xAxis.setLabel("Condition");
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Count");
+        yAxis.setTickUnit(1);
+        yAxis.setMinorTickVisible(false);
+        yAxis.setTickLabelFormatter(new javafx.util.StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                if (object.doubleValue() % 1 == 0) {
+                    return String.format("%.0f", object);
+                }
+                return "";
+            }
+            @Override
+            public Number fromString(String string) {
+                return Double.parseDouble(string);
+            }
+        });
 
         barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Condition Breakdown");

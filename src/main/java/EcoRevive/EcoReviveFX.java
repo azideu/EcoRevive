@@ -1,29 +1,18 @@
 package EcoRevive;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.Optional;
 
 public class EcoReviveFX extends Application {
 
     private RecyclingManager manager;
     private FileService fileService;
     private BorderPane mainLayout;
-    private TableView<EWasteItem> inventoryTable;
-    private Label pendingCountLabel;
-    private TextArea logArea;
     private FXDashboardPanel dashboardPanel;
 
     @Override
@@ -33,7 +22,7 @@ public class EcoReviveFX extends Application {
         manager.setRecycledItems(fileService.loadInventory());
 
         mainLayout = new BorderPane();
-        mainLayout.getStyleClass().add("root");
+        mainLayout.getStyleClass().add(Constants.STYLE_ROOT);
 
         // Navigation
         StackPane navBar = createNavBar();
@@ -42,24 +31,22 @@ public class EcoReviveFX extends Application {
         // Initial View
         showManagementPanel();
 
-        Scene scene = new Scene(mainLayout, 1100, 800);
+        Scene scene = new Scene(mainLayout, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
-        primaryStage.setTitle("EcoRevive: Smart E-Waste Recycling (JavaFX)");
+        primaryStage.setTitle(Constants.APP_TITLE);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(e -> {
             e.consume();
             saveAndExit();
         });
         primaryStage.show();
-
-        updatePendingCount();
     }
 
     private StackPane createNavBar() {
         StackPane nav = new StackPane();
         nav.setPadding(new Insets(15));
-        nav.getStyleClass().add("nav-bar");
+        nav.getStyleClass().add(Constants.STYLE_NAV_BAR);
 
         // Left: Branding
         Label brandLabel = new Label("EcoRevive");
@@ -94,11 +81,11 @@ public class EcoReviveFX extends Application {
         Button themeBtn = new Button("☀");
         themeBtn.setTooltip(new Tooltip("Toggle Light/Dark Mode"));
         themeBtn.setOnAction(e -> {
-            if (mainLayout.getStyleClass().contains("light-theme")) {
-                mainLayout.getStyleClass().remove("light-theme");
+            if (mainLayout.getStyleClass().contains(Constants.STYLE_LIGHT_THEME)) {
+                mainLayout.getStyleClass().remove(Constants.STYLE_LIGHT_THEME);
                 themeBtn.setText("☀");
             } else {
-                mainLayout.getStyleClass().add("light-theme");
+                mainLayout.getStyleClass().add(Constants.STYLE_LIGHT_THEME);
                 themeBtn.setText("☾");
             }
         });
@@ -119,287 +106,13 @@ public class EcoReviveFX extends Application {
     }
 
     private void showManagementPanel() {
-        SplitPane splitPane = new SplitPane();
-        splitPane.setDividerPositions(0.4); // 40% for submit form
-
-        VBox submitPane = createSubmitPane();
-        VBox processPane = createProcessPane();
-
-        splitPane.getItems().addAll(submitPane, processPane);
-        mainLayout.setCenter(splitPane);
-    }
-
-    private VBox createSubmitPane() {
-        VBox container = new VBox();
-        container.setPadding(new Insets(20));
-        container.setAlignment(Pos.CENTER);
-        
-        VBox card = new VBox(20);
-        card.getStyleClass().add("card");
-        card.setPadding(new Insets(30));
-        card.setAlignment(Pos.CENTER);
-        
-        Label header = new Label("New Entry");
-        header.getStyleClass().add("header-label");
-
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(15);
-        grid.setVgap(15);
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("Item Name");
-        ComboBox<String> categoryBox = new ComboBox<>(FXCollections.observableArrayList("Mobile", "Laptop", "Tablet", "TV", "Appliance", "Other"));
-        categoryBox.setPromptText("Select Category");
-        categoryBox.setMaxWidth(Double.MAX_VALUE);
-        TextField weightField = new TextField();
-        weightField.setPromptText("Weight (kg)");
-        ComboBox<String> conditionBox = new ComboBox<>(FXCollections.observableArrayList("New", "Used", "Broken", "Refurbished"));
-        conditionBox.setPromptText("Condition");
-        conditionBox.setMaxWidth(Double.MAX_VALUE);
-
-        grid.add(new Label("Name:"), 0, 0);
-        grid.add(nameField, 1, 0);
-        grid.add(new Label("Category:"), 0, 1);
-        grid.add(categoryBox, 1, 1);
-        grid.add(new Label("Weight (kg):"), 0, 2);
-        grid.add(weightField, 1, 2);
-        grid.add(new Label("Condition:"), 0, 3);
-        grid.add(conditionBox, 1, 3);
-
-        Button submitBtn = new Button("Submit Item");
-        submitBtn.setMaxWidth(Double.MAX_VALUE);
-        submitBtn.setOnAction(e -> {
-            try {
-                String name = nameField.getText();
-                String category = categoryBox.getValue();
-                String weightText = weightField.getText();
-                String condition = conditionBox.getValue();
-
-                if (name.isEmpty() || category == null || weightText.isEmpty() || condition == null) {
-                    showAlert("Error", "Please fill all fields.");
-                    return;
-                }
-                
-                double weight = Double.parseDouble(weightText);
-
-                String id = manager.generateNextId();
-                EWasteItem item = new EWasteItem(id, name, category, weight, condition);
-                manager.addItemToQueue(item);
-
-                nameField.clear();
-                weightField.clear();
-                categoryBox.getSelectionModel().clearSelection();
-                categoryBox.setPromptText("Select Category");
-                conditionBox.getSelectionModel().clearSelection();
-                conditionBox.setPromptText("Condition");
-
-                updatePendingCount();
-                showAlert("Success", "Item added to queue!");
-                if (logArea != null) logArea.appendText("Submitted: " + item.getName() + " (" + condition + ")\n");
-
-            } catch (NumberFormatException ex) {
-                showAlert("Error", "Invalid weight format.");
-            }
-        });
-
-        grid.add(submitBtn, 1, 4);
-        
-        card.getChildren().addAll(header, grid);
-        container.getChildren().add(card);
-        return container;
-    }
-
-
-    private VBox createProcessPane() {
-        VBox panel = new VBox(20);
-        panel.setPadding(new Insets(20));
-
-        VBox card = new VBox(15);
-        card.getStyleClass().add("card");
-        card.setPadding(new Insets(20));
-        VBox.setVgrow(card, Priority.ALWAYS);
-
-        Label header = new Label("Processing Queue");
-        header.getStyleClass().add("header-label");
-
-        HBox top = new HBox(20);
-        top.setAlignment(Pos.CENTER_LEFT);
-        pendingCountLabel = new Label("Pending Items: " + manager.getPendingItems().size());
-        pendingCountLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;");
-        
-        Button processBtn = new Button("Process Pending");
-        processBtn.setOnAction(e -> {
-            MyLinkedList<EWasteItem> processed = manager.processQueue();
-            if (processed.isEmpty()) {
-                showAlert("Info", "No items to process.");
-            } else {
-                for (EWasteItem item : processed) {
-                    if (logArea != null) logArea.appendText("Processed: " + item + "\n");
-                }
-                updatePendingCount();
-                showAlert("Success", "Processed " + processed.size() + " items.");
-            }
-        });
-
-        top.getChildren().addAll(pendingCountLabel, processBtn);
-
-        logArea = new TextArea();
-        logArea.setEditable(false);
-        VBox.setVgrow(logArea, Priority.ALWAYS);
-
-        card.getChildren().addAll(header, top, logArea);
-        panel.getChildren().add(card);
-        
-        return panel;
+        ManagementPanel panel = new ManagementPanel(manager);
+        mainLayout.setCenter(panel);
     }
 
     private void showInventoryPanel() {
-        VBox panel = new VBox(10);
-        panel.setPadding(new Insets(20));
-
-        VBox card = new VBox(15);
-        card.getStyleClass().add("card");
-        card.setPadding(new Insets(20));
-        VBox.setVgrow(card, Priority.ALWAYS);
-
-        // Search Panel
-        HBox searchPanel = new HBox(10);
-        searchPanel.setAlignment(Pos.CENTER_LEFT);
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search by name/ID...");
-        Button searchBtn = new Button("Search");
-        Button clearBtn = new Button("Clear");
-        
-        searchBtn.setOnAction(e -> updateInventoryTable(manager.searchItems(searchField.getText())));
-        
-        ComboBox<String> categoryFilterBox = new ComboBox<>(FXCollections.observableArrayList(
-            "All Categories", "Mobile", "Laptop", "Tablet", "TV", "Appliance", "Other"
-        ));
-        categoryFilterBox.setPromptText("Filter Category");
-        categoryFilterBox.setOnAction(e -> {
-            String selected = categoryFilterBox.getValue();
-            if (selected == null || selected.equals("All Categories")) {
-                updateInventoryTable(manager.getRecycledItems());
-            } else {
-                MyLinkedList<EWasteItem> filtered = new MyLinkedList<>();
-                for (EWasteItem item : manager.getRecycledItems()) {
-                    if (item.getCategory().equals(selected)) {
-                        filtered.add(item);
-                    }
-                }
-                updateInventoryTable(filtered);
-            }
-        });
-
-        clearBtn.setOnAction(e -> {
-            searchField.clear();
-            categoryFilterBox.setValue(null);
-            updateInventoryTable(manager.getRecycledItems());
-        });
-
-        ComboBox<String> sortBox = new ComboBox<>(FXCollections.observableArrayList(
-            "Weight (Low-High)", "Weight (High-Low)", "Category", "Name", "Condition"
-        ));
-        sortBox.setPromptText("Sort By...");
-        sortBox.setOnAction(e -> {
-            String criteria = sortBox.getValue();
-            if (criteria != null) {
-                if (criteria.equals("Weight (Low-High)")) {
-                    manager.sortItems((i1, i2) -> Double.compare(i1.getWeight(), i2.getWeight()));
-                } else if (criteria.equals("Weight (High-Low)")) {
-                    manager.sortItems((i1, i2) -> Double.compare(i2.getWeight(), i1.getWeight()));
-                } else if (criteria.equals("Category")) {
-                    manager.sortItems((i1, i2) -> i1.getCategory().compareTo(i2.getCategory()));
-                } else if (criteria.equals("Name")) {
-                    manager.sortItems((i1, i2) -> i1.getName().compareTo(i2.getName()));
-                } else if (criteria.equals("Condition")) {
-                    manager.sortItems((i1, i2) -> i1.getCondition().compareTo(i2.getCondition()));
-                }
-                updateInventoryTable(manager.getRecycledItems());
-            }
-        });
-
-        searchPanel.getChildren().addAll(new Label("Filter:"), searchField, searchBtn, clearBtn, sortBox, categoryFilterBox);
-
-        // Table
-        inventoryTable = new TableView<>();
-        TableColumn<EWasteItem, String> colId = new TableColumn<>("ID");
-        colId.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getId()));
-        
-        TableColumn<EWasteItem, String> colName = new TableColumn<>("Name");
-        colName.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
-        
-        TableColumn<EWasteItem, String> colCat = new TableColumn<>("Category");
-        colCat.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCategory()));
-        
-        TableColumn<EWasteItem, Number> colWeight = new TableColumn<>("Weight (kg)");
-        colWeight.setCellValueFactory(cell -> new SimpleDoubleProperty(cell.getValue().getWeight()));
-        
-        TableColumn<EWasteItem, String> colCond = new TableColumn<>("Condition");
-        colCond.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCondition()));
-        
-        // Custom Cell Factory for Status Badges
-        colCond.setCellFactory(column -> new TableCell<EWasteItem, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                    setText(null);
-                } else {
-                    Label badge = new Label(item);
-                    badge.getStyleClass().add("status-badge");
-                    
-                    switch (item.toLowerCase()) {
-                        case "new": badge.getStyleClass().add("status-new"); break;
-                        case "broken": badge.getStyleClass().add("status-broken"); break;
-                        case "used": badge.getStyleClass().add("status-used"); break;
-                        case "refurbished": badge.getStyleClass().add("status-refurbished"); break;
-                    }
-                    setGraphic(badge);
-                    setText(null);
-                }
-            }
-        });
-
-        inventoryTable.getColumns().add(colId);
-        inventoryTable.getColumns().add(colName);
-        inventoryTable.getColumns().add(colCat);
-        inventoryTable.getColumns().add(colWeight);
-        inventoryTable.getColumns().add(colCond);
-        inventoryTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        VBox.setVgrow(inventoryTable, Priority.ALWAYS);
-
-        // Buttons
-        HBox buttonPanel = new HBox(10);
-        buttonPanel.setAlignment(Pos.CENTER_RIGHT);
-        Button deleteBtn = new Button("Delete Selected");
-        Button editBtn = new Button("Edit Selected");
-        Button exportBtn = new Button("Export CSV");
-        Button refreshBtn = new Button("Refresh");
-
-        deleteBtn.setOnAction(e -> deleteSelectedItem());
-        editBtn.setOnAction(e -> editSelectedItem());
-        exportBtn.setOnAction(e -> exportCSV());
-        refreshBtn.setOnAction(e -> updateInventoryTable(manager.getRecycledItems()));
-
-        Button undoBtn = new Button("Undo Delete");
-        undoBtn.setOnAction(e -> {
-            if (manager.undoDelete()) {
-                updateInventoryTable(manager.getRecycledItems());
-                showAlert("Success", "Restored last deleted item.");
-            } else {
-                showAlert("Info", "Nothing to undo.");
-            }
-        });
-
-        buttonPanel.getChildren().addAll(deleteBtn, editBtn, exportBtn, refreshBtn, undoBtn);
-
-        card.getChildren().addAll(searchPanel, inventoryTable, buttonPanel);
-        panel.getChildren().add(card);
+        InventoryPanel panel = new InventoryPanel(manager, fileService);
         mainLayout.setCenter(panel);
-        updateInventoryTable(manager.getRecycledItems());
     }
 
     private void showStatsPanel() {
@@ -416,129 +129,9 @@ public class EcoReviveFX extends Application {
         mainLayout.setCenter(container);
     }
 
-    private void updateInventoryTable(MyLinkedList<EWasteItem> items) {
-        if (inventoryTable != null) {
-            ObservableList<EWasteItem> list = FXCollections.observableArrayList();
-            for (EWasteItem item : items) {
-                list.add(item);
-            }
-            inventoryTable.setItems(list);
-        }
-    }
-
-    private void updatePendingCount() {
-        if (pendingCountLabel != null) {
-            pendingCountLabel.setText("Pending Items: " + manager.getPendingItems().size());
-        }
-    }
-
-    private void deleteSelectedItem() {
-        EWasteItem selected = inventoryTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Warning", "Please select an item to delete.");
-            return;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete");
-        alert.setHeaderText("Delete Item " + selected.getId() + "?");
-        styleDialog(alert);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            if (manager.removeItem(selected.getId())) {
-                updateInventoryTable(manager.getRecycledItems());
-            }
-        }
-    }
-
-    private void editSelectedItem() {
-        EWasteItem selected = inventoryTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Warning", "Please select an item to edit.");
-            return;
-        }
-
-        Dialog<EWasteItem> dialog = new Dialog<>();
-        dialog.setTitle("Edit Item");
-        dialog.setHeaderText("Edit details for " + selected.getId());
-        styleDialog(dialog);
-
-        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField nameField = new TextField(selected.getName());
-        ComboBox<String> categoryBox = new ComboBox<>(FXCollections.observableArrayList("Mobile", "Laptop", "Tablet", "TV", "Appliance", "Other"));
-        categoryBox.setValue(selected.getCategory());
-        TextField weightField = new TextField(String.valueOf(selected.getWeight()));
-        ComboBox<String> conditionBox = new ComboBox<>(FXCollections.observableArrayList("New", "Used", "Broken", "Refurbished"));
-        conditionBox.setValue(selected.getCondition());
-
-        grid.add(new Label("Name:"), 0, 0);
-        grid.add(nameField, 1, 0);
-        grid.add(new Label("Category:"), 0, 1);
-        grid.add(categoryBox, 1, 1);
-        grid.add(new Label("Weight:"), 0, 2);
-        grid.add(weightField, 1, 2);
-        grid.add(new Label("Condition:"), 0, 3);
-        grid.add(conditionBox, 1, 3);
-
-        dialog.getDialogPane().setContent(grid);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == saveButtonType) {
-                try {
-                    manager.updateItem(selected.getId(), nameField.getText(), categoryBox.getValue(), Double.parseDouble(weightField.getText()), conditionBox.getValue());
-                    updateInventoryTable(manager.getRecycledItems());
-                } catch (NumberFormatException e) {
-                    showAlert("Error", "Invalid weight.");
-                }
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
-    }
-
-    private void exportCSV() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save CSV");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        File file = fileChooser.showSaveDialog(mainLayout.getScene().getWindow());
-        
-        if (file != null) {
-            fileService.exportToCSV(manager.getRecycledItems(), file.getAbsolutePath());
-            showAlert("Success", "Exported to " + file.getName());
-        }
-    }
-
     private void saveAndExit() {
         fileService.saveInventory(manager.getRecycledItems());
         System.exit(0);
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        styleDialog(alert);
-        alert.showAndWait();
-    }
-
-    private void styleDialog(Dialog<?> dialog) {
-        DialogPane pane = dialog.getDialogPane();
-        pane.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        pane.getStyleClass().add("custom-dialog");
-        
-        // Inherit light theme if active
-        if (mainLayout.getStyleClass().contains("light-theme")) {
-            pane.getStyleClass().add("light-theme");
-        }
     }
 
     public static void main(String[] args) {

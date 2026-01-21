@@ -1,25 +1,50 @@
-002,Broken Laptop,Laptop,2.5,Broken
-004,LED Monitor,Appliance,15.0,New
-009,LED TV,TV,8.0,Broken
-003,iPad,Tablet,0.5,New
-006,Gaming Console,Other,3.0,Refurbished
-008,Keyboard,Other,0.8,Used
-007,Microwave,Appliance,12.5,Used
-001,Old Phone,Mobile,0.2,Used
-010,Printer,Appliance,5.5,Used
-005,Smart Watch,Mobile,0.1,Used
-011,Galaxy S21,Mobile,0.2,Refurbished
-012,Dell XPS,Laptop,2.2,Used
-013,Sony Bravia,TV,12.0,Broken
-014,iPad Air,Tablet,0.6,Used
-015,Blender,Appliance,3.0,New
-016,Headphones,Other,0.3,Used
-017,iPhone 12,Mobile,0.2,Broken
-018,MacBook Pro,Laptop,2.0,New
-019,Kindle,Tablet,0.3,Used
-020,Toaster,Appliance,1.5,Used
-021,Old Radio,Other,2.0,Broken
-022,Monitor 24",Appliance,4.5,Refurbished
-023,Android Tablet,Tablet,0.5,Broken
-024,GameBoy,Other,0.2,Used
-025,CRT TV,TV,15.0,Broken
+001,Nokia 3310,Mobile,0.2,Used
+002,HP Pavilion dv6,Laptop,2.5,Broken
+003,Apple iPad Air 2,Tablet,0.5,New
+004,Dell UltraSharp 24 Monitor,Appliance,5.0,New
+005,Samsung Galaxy Watch 4,Mobile,0.1,Used
+006,PlayStation 3,Other,3.0,Refurbished
+007,Panasonic Microwave Oven,Appliance,12.5,Used
+008,Logitech Mechanical Keyboard,Other,0.8,Used
+009,Samsung 32-inch LED TV,TV,8.0,Broken
+010,Canon Pixma Printer,Appliance,5.5,Used
+011,Samsung Galaxy S21,Mobile,0.2,Refurbished
+012,Dell XPS 13,Laptop,1.2,Used
+013,Sony Bravia 55-inch TV,TV,12.0,Broken
+014,Apple iPad Pro 11-inch,Tablet,0.6,Used
+015,Panasonic Blender,Appliance,3.0,New
+016,Sony WH-1000XM4 Headphones,Other,0.3,Used
+017,Apple iPhone 6,Mobile,0.2,Broken
+018,Apple MacBook Pro 16-inch,Laptop,2.0,New
+019,Samsung Galaxy Tab S7,Tablet,0.5,Used
+020,Philips Toaster,Appliance,1.5,Used
+021,Vintage FM Radio,Other,2.0,Broken
+022,BenQ 24-inch Monitor,Appliance,4.5,Refurbished
+023,Samsung Galaxy Tab A8,Tablet,0.5,Broken
+024,Nintendo GameBoy Color,Other,0.2,Used
+025,Sony Trinitron CRT TV,TV,15.0,Broken
+026,Acer 27-inch Monitor,Appliance,5.5,Used
+027,Apple iPad Mini,Tablet,0.6,New
+028,Xiaomi 13T,Mobile,0.2,Used
+029,HP Pavilion 15,Laptop,2.3,Refurbished
+030,Samsung QLED 55-inch TV,TV,18.5,Broken
+031,Pensonic Electric Kettle,Appliance,1.2,Used
+032,Fitbit Versa 3,Other,0.1,New
+033,Microsoft Surface Pro 7,Tablet,0.8,Used
+034,Custom Desktop PC,Other,8.5,Refurbished
+035,Nespresso Essenza Mini,Appliance,3.0,Broken
+036,Dyson V11 Vacuum,Appliance,3.0,Used
+037,GoPro Hero 9,Other,0.3,New
+038,LG 65-inch OLED TV,TV,22.0,Used
+039,Lenovo ThinkPad X1 Carbon,Laptop,1.1,Refurbished
+040,Bose SoundLink Mini,Other,0.7,Used
+041,OnePlus 9 Pro,Mobile,0.2,Broken
+042,Asus ROG Strix Laptop,Laptop,2.8,Used
+043,Nespresso Vertuo,Appliance,4.0,Refurbished
+044,Garmin Fenix 6,Other,0.1,Used
+045,Mi TV Stick,Other,0.1,New
+046,Apple Watch Series 7,Mobile,0.1,Broken
+047,Google Nest Mini,Other,0.2,Used
+048,Toshiba 43-inch Smart TV,TV,9.5,Refurbished
+049,Xiaomi Mi Band 6,Other,0.1,New
+050,Philips Pressure Cooker,Appliance,5.2,Used
